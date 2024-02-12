@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref } from 'vue'
 
 const data = ref(['akash', 'jawad', 'ratul', 'wakil'])
@@ -8,26 +8,66 @@ const handleClick = () => {
   console.log('first')
   data.value = [...data.value, inputValue]
 }
+</script> -->
+
+<script lang="ts">
+import CrossIcon from './components/icons/CrossIcon.vue'
+export default {
+  name: 'App',
+  data() {
+    return {
+      friendsName: ['akash', 'jawad', 'ratul', 'wakil'],
+      inputName: ''
+    }
+  },
+  methods: {
+    handleClick() {
+      this.friendsName.push(this.inputName)
+      //= [...this.friendsName, this.inputName]
+      this.inputName = ''
+    },
+    deleteName(friend: string) {
+      console.log(friend)
+      const index = this.friendsName.indexOf(friend)
+      if (index > -1) this.friendsName.splice(index, 1)
+    }
+  },
+  components: {
+    CrossIcon
+  }
+}
 </script>
 
 <template>
-  <main class="flex flex-col items-center justify-center h-screen">
-    <div>
-      <template v-for="item in data" :key="item">
-        <h1
-          class="p-2 border-2 m-2 rounded-2xl bg-slate-400 text-xl font-bold text-center"
-          :class="item === 'meraj bhai' ? 'bg-red-500' : ''"
+  <main class="flex flex-col items-center justify-center h-screen mt-10">
+    <template v-for="friend in friendsName" :key="friend">
+      <div class="relative">
+        <p
+          class="p-2 border-2 m-2 rounded-2xl text-xl font-bold text-center"
+          :class="friend === 'meraj bhai' ? 'bg-red-500' : 'bg-slate-500'"
         >
-          {{ item }}
-        </h1>
-      </template>
-    </div>
-    <input type="text" v-model="inputValue" placeholder="Enter a name" class="border-2 p-2" />
+          {{ friend }}
+        </p>
+        <p
+          class="absolute top-0 right-0 cursor-pointer bg-red-400 hover:bg-red-600 rounded-full"
+          v-on:click="() => deleteName(friend)"
+        >
+          <CrossIcon />
+        </p></div
+    ></template>
+    <input
+      type="text"
+      v-model="inputName"
+      @keyup.enter="handleClick"
+      placeholder="Enter a name"
+      class="border-2 p-2"
+    />
     <button
       class="p-2 text-lg font-bold bg-green-500 hover:bg-green-400 rounded-2xl mt-4"
       @click="handleClick"
+      @keyup.enter="handleClick"
     >
-      click here
+      Add name
     </button>
   </main>
 </template>
